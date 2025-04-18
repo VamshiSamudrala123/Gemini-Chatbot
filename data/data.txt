@@ -1,0 +1,75 @@
+**Hi, I'd love to walk you through my background as a Data Scientist.**
+
+I have around **3 years of experience** working across **machine learning, big data processing, and real-time analytics**. Over the years, I've built **predictive models** that enhanced financial risk assessments and also designed **scalable ETL pipelines** using tools like **AWS, PySpark, and Databricks**, which significantly reduced our data processing time.
+
+### **Technical Skill Set**
+I'm hands-on with:
+- **Languages**: Python, SQL, and R  
+- **Databases**: MySQL, SQL Server, and cloud storage solutions like AWS S3 and Azure Blob  
+- **ML & Deep Learning**: I work with TensorFlow, PyTorch, Keras, scikit-learn, and am experienced with models like CNNs, RNNs, LSTM, GANs, Autoencoders  
+- **Big Data & Pipelines**: Apache Spark, Hadoop, Hive, Kafka, and Airflow are part of my toolbox  
+- **NLP**: I've used models like BERT, GPT, and libraries like SpaCy and NLTK  
+- **Visualization**: I’m comfortable building dashboards with Tableau, Power BI, and even custom Python visualizations  
+- **Version control**: GitHub and Git for collaboration and tracking
+
+### **Professional Experience**
+
+**Most recently**, I worked at **Guttman Community College in New York** as a **Data Analyst** from **Oct to Dec 2024**.  
+There, I:
+- Analyzed student data to identify factors affecting retention, improving rates by **9%**
+- Built ML models that could flag at-risk students early, with around **22% accuracy**
+- Applied clustering to personalize learning plans, improving outcomes by **28%**
+- Created dashboards using **Power BI, Tableau, and Python**, cutting report generation time by **45%**
+- Used **NLP** to analyze student feedback and reports, boosting satisfaction by **16%**
+- Automated web scraping for tracking alumni, which made our career guidance efforts **20% more effective**
+
+Before that, I was a **Data Scientist at Infosys**, from **Jan 2021 to Jan 2023**.  
+Some highlights from that role:
+- Built **time-series models (ARIMA, Prophet)** for financial forecasting—boosting prediction accuracy by **15%**
+- Created **portfolio optimization models** which improved investment returns by **25%**
+- Used **NLP** to extract financial data from unstructured reports, cutting processing time by **18%**
+- Developed a **recommendation engine** that drove up customer engagement by **35%**
+- Built **real-time analytics dashboards** and used **reinforcement learning** for trading strategy optimization  
+- Overall, I worked a lot with **Spark, Python, and ML models**, optimizing pipelines and reducing compute time by **30%**
+
+I began my journey at **TCS** as a **Jr. Data Scientist**, from **May to Dec 2020**.  
+There, I:
+- Worked on deep learning models for **image classification and NLP** using TensorFlow  
+- Built **ETL pipelines** with Spark and Kafka—achieving **30% faster processing**  
+- Contributed to a cloud-based data warehouse setup using **Azure Synapse**  
+- Built dashboards in **Power BI** and automated CI/CD workflows using **Jenkins and Docker**  
+- I also managed data migration projects using Spark and ML for better accuracy during transitions
+
+### **Projects**
+Outside of work, I’ve done some impactful projects, such as:
+- A **Lung and Colon Cancer Image Classifier** using CNNs and TensorFlow on the LC25000 dataset  
+- A **Trip Duration Prediction Model** for NYC Yellow Taxis—where I used regression models integrating trip and weather data
+
+### **Education**
+I just wrapped up my **Master’s in Data Science** at **Pace University, New York (Jan 2023 – Dec 2024)**.  
+During my program, I combined academic research with real-world applications—balancing theory and practice across multiple domains.
+
+Capstone Project: Deep Learning for Lung and Colon Cancer Classification
+
+For my capstone, I worked on a deep learning project focused on classifying lung and colon cancer from histopathological images using CNNs and transfer learning techniques.
+
+We used a publicly available dataset called LC25000, which contains 25,000 high-resolution images across five categories, including lung adenocarcinoma, lung squamous cell carcinoma, colon adenocarcinoma, and benign tissues.
+
+The key challenge we encountered was that some cancer types—like lung_scc and lung_aca—had very similar pixel intensities, which led to misclassifications. To handle this, I implemented Class-Specific Image Processing (CSIP) using histogram equalization. This significantly improved contrast and differentiation between classes.
+
+For modeling:
+
+I built a custom CNN, and also
+
+Fine-tuned a pretrained ResNet50 using transfer learning.
+
+After applying CSIP, the custom CNN achieved around 96.8% accuracy, and ResNet50 hit 99.5%, which showed a major boost in performance just from preprocessing and advanced modeling techniques.
+
+We evaluated model performance using accuracy, precision, recall, F1-score, and confusion matrices to better understand and reduce errors, especially between similar classes.
+
+Key Takeaways:
+Preprocessing and data quality played a massive role—CSIP improved our results dramatically.
+
+Transfer learning helped us get higher accuracy with fewer training samples and reduced training time.
+
+This approach could potentially be used to support clinical workflows by assisting pathologists in diagnosis, although human expertise remains essential.

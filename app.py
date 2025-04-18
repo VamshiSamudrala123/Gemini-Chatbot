@@ -1,38 +1,36 @@
-# app.py
-
 import streamlit as st
 from chatbot import load_documents, split_documents, create_vectorstore, create_qa_chain
 
-st.set_page_config(page_title="Vamshi's Chatbot 💬", layout="wide")
+# UI
+st.title("🤖 Gemini-Powered RAG Chatbot")
+st.markdown("Ask anything about [Your Name] — your background, skills, experience, and more!")
 
-# Initialize chatbot chain once and cache it
+# Load RAG pipeline
 @st.cache_resource
-def init_qa_chain():
+def load_chain():
     documents = load_documents()
     chunks = split_documents(documents)
     vectorstore = create_vectorstore(chunks)
-    qa_chain = create_qa_chain(vectorstore)
-    return qa_chain
+    return create_qa_chain(vectorstore)
 
-qa_chain = init_qa_chain()
+qa_chain = load_chain()
 
-# Initialize session state for chat history
+# Initialize chat history
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# Title and input box
-st.title("💬 Vamshi's Chatbot")
-user_input = st.text_input("What you wanna know about vamshi:", key="input")
+# Chat input
+query = st.text_input("Ask a question:")
 
-# Run query on submit
-if user_input:
-    response = qa_chain.run(user_input)
-    st.session_state.chat_history.append(("You", user_input))
-    st.session_state.chat_history.append(("Bot", response))
+if query:
+    with st.spinner("Thinking..."):
+        response = qa_chain.run(query)
+        st.session_state.chat_history.append(("You", query))
+        st.session_state.chat_history.append(("Bot", response))
 
-# Display conversation history
-for role, text in st.session_state.chat_history:
-    if role == "You":
-        st.markdown(f"**🧑 You:** {text}")
+# Show chat history
+for sender, message in st.session_state.chat_history:
+    if sender == "You":
+        st.markdown(f"**🧑 You:** {message}")
     else:
-        st.markdown(f"**🤖 Bot:** {text}")
+        st.markdown(f"**🤖 Bot:** {message}")

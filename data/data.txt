@@ -1,75 +1,142 @@
-**Hi,I'm Vamshi. I'd love to walk you through my background as a Data Scientist.**
+Thanks for sharing all of this, Vamshi! That’s an impressive background with solid hands-on experience, academic projects, and technical depth. Here's how we can **refine and structure everything** into a **clean, professional narrative**, especially if you're planning to use it for LinkedIn, a personal website, or introductions during interviews. I’ve also added your **schooling** and formatted your **Tesla and Anomaly Detection projects** properly.
 
-I have around **3 years of experience** working across **machine learning, big data processing, and real-time analytics**. Over the years, I've built **predictive models** that enhanced financial risk assessments and also designed **scalable ETL pipelines** using tools like **AWS, PySpark, and Databricks**, which significantly reduced our data processing time.
+---
 
-### **Technical Skill Set**
-I'm hands-on with:
-- **Languages**: Python, SQL, and R  
-- **Databases**: MySQL, SQL Server, and cloud storage solutions like AWS S3 and Azure Blob  
-- **ML & Deep Learning**: I work with TensorFlow, PyTorch, Keras, scikit-learn, and am experienced with models like CNNs, RNNs, LSTM, GANs, Autoencoders  
-- **Big Data & Pipelines**: Apache Spark, Hadoop, Hive, Kafka, and Airflow are part of my toolbox  
-- **NLP**: I've used models like BERT, GPT, and libraries like SpaCy and NLTK  
-- **Visualization**: I’m comfortable building dashboards with Tableau, Power BI, and even custom Python visualizations  
-- **Version control**: GitHub and Git for collaboration and tracking
+## 👋 Hi, I'm Vamshi – Data Scientist | ML Engineer | Big Data Enthusiast
 
-### **Professional Experience**
+I bring **3+ years of hands-on experience** in **machine learning**, **big data engineering**, and **real-time analytics**. My work bridges the gap between raw data and actionable insights—building predictive models, automating workflows, and delivering intelligent systems that make a tangible impact across industries.
 
-**Most recently**, I worked at **Guttman Community College in New York** as a **Data Analyst** from **Oct to Dec 2024**.  
-There, I:
-- Analyzed student data to identify factors affecting retention, improving rates by **9%**
-- Built ML models that could flag at-risk students early, with around **22% accuracy**
-- Applied clustering to personalize learning plans, improving outcomes by **28%**
-- Created dashboards using **Power BI, Tableau, and Python**, cutting report generation time by **45%**
-- Used **NLP** to analyze student feedback and reports, boosting satisfaction by **16%**
-- Automated web scraping for tracking alumni, which made our career guidance efforts **20% more effective**
+---
 
-Before that, I was a **Data Scientist at Infosys**, from **Jan 2021 to Jan 2023**.  
-Some highlights from that role:
-- Built **time-series models (ARIMA, Prophet)** for financial forecasting—boosting prediction accuracy by **15%**
-- Created **portfolio optimization models** which improved investment returns by **25%**
-- Used **NLP** to extract financial data from unstructured reports, cutting processing time by **18%**
-- Developed a **recommendation engine** that drove up customer engagement by **35%**
-- Built **real-time analytics dashboards** and used **reinforcement learning** for trading strategy optimization  
-- Overall, I worked a lot with **Spark, Python, and ML models**, optimizing pipelines and reducing compute time by **30%**
+### 📊 **Technical Skill Set**
 
-I began my journey at **TCS** as a **Jr. Data Scientist**, from **May to Dec 2020**.  
-There, I:
-- Worked on deep learning models for **image classification and NLP** using TensorFlow  
-- Built **ETL pipelines** with Spark and Kafka—achieving **30% faster processing**  
-- Contributed to a cloud-based data warehouse setup using **Azure Synapse**  
-- Built dashboards in **Power BI** and automated CI/CD workflows using **Jenkins and Docker**  
-- I also managed data migration projects using Spark and ML for better accuracy during transitions
+- **Languages**: Python, SQL, R  
+- **Databases**: MySQL, SQL Server, AWS S3, Azure Blob Storage  
+- **ML & Deep Learning**: scikit-learn, TensorFlow, Keras, PyTorch, CNNs, RNNs, LSTMs, GANs, Autoencoders  
+- **Big Data & Pipelines**: Apache Spark, Hadoop, Hive, Kafka, Airflow  
+- **NLP**: BERT, GPT, SpaCy, NLTK  
+- **Visualization**: Tableau, Power BI, Matplotlib, Seaborn  
+- **Version Control**: GitHub, Git
 
-### **Projects**
-Outside of work, I’ve done some impactful projects, such as:
-- A **Lung and Colon Cancer Image Classifier** using CNNs and TensorFlow on the LC25000 dataset  
-- A **Trip Duration Prediction Model** for NYC Yellow Taxis—where I used regression models integrating trip and weather data
+---
 
-### **Education**
-I just wrapped up my **Master’s in Data Science** at **Pace University, New York (Jan 2023 – Dec 2024)**.  
-During my program, I combined academic research with real-world applications—balancing theory and practice across multiple domains.
+### 💼 **Professional Experience**
 
-Capstone Project: Deep Learning for Lung and Colon Cancer Classification
+**🔹 Data Analyst – Guttman Community College, New York**  
+*Oct 2024 – Dec 2024*  
+- Analyzed student data, boosting retention rates by **9%**
+- Built ML models for early-risk detection with **22% accuracy**
+- Applied clustering for personalized learning paths, improving performance by **28%**
+- Created dashboards in **Power BI, Tableau**, and Python, reducing report time by **45%**
+- Conducted NLP on feedback, raising student satisfaction by **16%**
+- Automated alumni tracking via web scraping, enhancing guidance effectiveness by **20%**
 
-For my capstone, I worked on a deep learning project focused on classifying lung and colon cancer from histopathological images using CNNs and transfer learning techniques.
+**🔹 Data Scientist – Infosys**  
+*Jan 2021 – Jan 2023*  
+- Built **ARIMA & Prophet time-series models**, improving forecasts by **15%**
+- Developed **portfolio optimization models**, boosting returns by **25%**
+- Used **NLP** to extract financial data from reports, saving **18%** in processing time
+- Created a **recommendation engine** to enhance engagement by **35%**
+- Leveraged **reinforcement learning** for trading strategies
+- Built **real-time dashboards** with **Spark**, reducing compute time by **30%**
 
-We used a publicly available dataset called LC25000, which contains 25,000 high-resolution images across five categories, including lung adenocarcinoma, lung squamous cell carcinoma, colon adenocarcinoma, and benign tissues.
+**🔹 Jr. Data Scientist – TCS**  
+*May 2020 – Dec 2020*  
+- Built deep learning models for **image classification and NLP**
+- Developed ETL pipelines using **Spark & Kafka**, cutting processing time by **30%**
+- Contributed to cloud data warehousing on **Azure Synapse**
+- Built dashboards in Power BI and automated DevOps with **Jenkins & Docker**
 
-The key challenge we encountered was that some cancer types—like lung_scc and lung_aca—had very similar pixel intensities, which led to misclassifications. To handle this, I implemented Class-Specific Image Processing (CSIP) using histogram equalization. This significantly improved contrast and differentiation between classes.
+---
 
-For modeling:
+### 🎓 **Education**
 
-I built a custom CNN, and also
+**Pace University, New York**  
+*Master’s in Data Science | Jan 2023 – Dec 2024*  
+Capstone: **Deep Learning for Lung and Colon Cancer Classification**  
+- Used the **LC25000** dataset with 25,000 high-res histopathological images  
+- Developed a custom CNN & fine-tuned **ResNet50**  
+- Applied Class-Specific Image Processing (CSIP) to improve class separation  
+- Achieved **96.8% accuracy** with CNN, **99.5% with ResNet50**
 
-Fine-tuned a pretrained ResNet50 using transfer learning.
+**St. Martin’s Engineering College, Hyderabad**  
+*Bachelor’s in Electronics and Communication Engineering | 2016 – 2020*
 
-After applying CSIP, the custom CNN achieved around 96.8% accuracy, and ResNet50 hit 99.5%, which showed a major boost in performance just from preprocessing and advanced modeling techniques.
+**Sri Chaitanya Junior Kalashala**  
+*High School (11th & 12th Grade) | 2014 – 2016*
 
-We evaluated model performance using accuracy, precision, recall, F1-score, and confusion matrices to better understand and reduce errors, especially between similar classes.
+**Daffodils High School**  
+*Schooling till 10th Grade | Up to 2014*
 
-Key Takeaways:
-Preprocessing and data quality played a massive role—CSIP improved our results dramatically.
+---
 
-Transfer learning helped us get higher accuracy with fewer training samples and reduced training time.
+### 🧠 **Projects**
 
-This approach could potentially be used to support clinical workflows by assisting pathologists in diagnosis, although human expertise remains essential.
+#### 📈 Optimizing Trading Strategies with Machine Learning: Tesla (TSLA)
+**Sep 2023 – Oct 2023 | Pace University**
+- Retrieved TSLA stock data from **Yahoo Finance**
+- Designed two trading strategies: next-day close and **golden cross/death cross**
+- Implemented classifiers: **KNN, Random Forest, XGBoost, SVM, Gradient Boosting**
+- Evaluated using **accuracy, precision, recall, and F1 score**
+- Identified best-performing models for each strategy and delivered actionable trading signals  
+**Skills**: Financial data analysis, ML classification, strategy optimization
+
+---
+
+#### 🔥 Anomaly Detection in Device Temperature Data  
+**Oct 2023 – Nov 2023 | Pace University**
+- Visualized time-series temperature data to uncover patterns and anomalies
+- Created new features like day of the week & time clusters
+- Used **Isolation Forest**, **One-Class SVM**, and **Autoencoders** for unsupervised anomaly detection
+- Plotted results to identify real-world temperature outliers
+**Skills**: Unsupervised learning, time-series analysis, anomaly detection
+
+
+---
+
+### 🛰️ Building Segmentation Using Segment Anything Model (SAM)
+
+Applied Meta AI’s **Segment Anything Model (SAM)** to perform **zero-shot segmentation** of buildings in high-resolution satellite imagery. Leveraged **Leafmap** for geospatial analysis and interactive visualization.
+
+#### 🔍 Key Features:
+- **Zero-shot segmentation**: Identified buildings without task-specific training.
+- **Customizable ROIs**: Allowed users to select regions of interest interactively or via predefined bounding boxes.
+- **Interactive map visualizations**: Overlaid segmentation results on maps for intuitive exploration.
+- **Exportable outputs**: Enabled saving of masks for use in GIS applications or downstream workflows.
+
+#### 🌐 Use Cases:
+- Urban development and planning
+- Disaster recovery analysis
+- Environmental change monitoring
+
+#### 🛠 Technologies Used:
+- Segment Anything Model (SAM)
+- Leafmap (Geospatial Python Library)
+- Python (Image Processing, Automation)
+- Satellite Imagery Analysis
+
+#### 🧠 Skills Demonstrated:
+`Segment Anything Model (SAM)` · `Leafmap` · `Python` · `Image Segmentation` · `Computer Vision` · `Geospatial Analysis` · `Satellite Image Processing`
+
+---
+
+### 🤖 Custom RAG Chatbot Using Gemini API & LangChain
+
+Built a personalized AI chatbot using **Google’s Gemini API** and **LangChain**, designed to answer questions based on context from `.txt` documents through **Retrieval-Augmented Generation (RAG)**.
+
+#### 🔧 Key Features:
+- **Gemini Embeddings**: Transformed documents into high-dimensional vectors using Gemini for semantic understanding.
+- **FAISS Vector Store**: Stored embeddings for fast similarity-based retrieval of relevant content.
+- **RAG Pipeline**: Implemented a custom pipeline where Gemini retrieves relevant document chunks and generates accurate, context-aware responses.
+- **Chat Memory**: Integrated `ConversationBufferMemory` from LangChain to maintain coherent, multi-turn dialogues.
+- **Secure & Flexible Deployment**: 
+  - Runs via terminal or Streamlit UI.
+  - Uses `.env` or Streamlit `secrets.toml` for API key management.
+
+#### 🌟 Technologies Used:
+- LangChain · Gemini API · FAISS · Streamlit · Python · dotenv · Vector Databases · RAG Architecture
+
+#### 💡 Skills Demonstrated:
+`Retrieval-Augmented Generation (RAG)` · `LangChain` · `Google Gemini API` · `FAISS` · `Python` · `Streamlit` · `Vector Embeddings` · `Conversational Memory` · `Secure Environment Configuration`
+
+---

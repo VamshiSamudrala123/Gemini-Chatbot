@@ -1,4 +1,4 @@
-**Hi, I'd love to walk you through my background as a Data Scientist.**
+**Hi,I'm Vamshi. I'd love to walk you through my background as a Data Scientist.**
 
 I have around **3 years of experience** working across **machine learning, big data processing, and real-time analytics**. Over the years, I've built **predictive models** that enhanced financial risk assessments and also designed **scalable ETL pipelines** using tools like **AWS, PySpark, and Databricks**, which significantly reduced our data processing time.
 

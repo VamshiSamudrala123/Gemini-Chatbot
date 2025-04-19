@@ -3,7 +3,7 @@ from chatbot import load_documents, split_documents, create_vectorstore, create_
 
 # UI
 st.title("Vamshi's Chatbot")
-st.markdown("Ask me")
+st.markdown("Please ask anything about vamshi")
 
 # Load RAG pipeline
 @st.cache_resource

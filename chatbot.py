@@ -7,11 +7,11 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import TextLoader
 from langchain.chains import RetrievalQA
 from langchain.memory import ConversationBufferMemory
-
+import streamlit as st
 
 # Load API key from .env
 load_dotenv()
-os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
+os.environ["GOOGLE_API_KEY"] = st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
 
 # 1. Load documents from 'data/' folder
 def load_documents():

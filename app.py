@@ -2,8 +2,8 @@ import streamlit as st
 from chatbot import load_documents, split_documents, create_vectorstore, create_qa_chain
 
 # UI
-st.title("🤖 Gemini-Powered RAG Chatbot")
-st.markdown("Ask anything about [Your Name] — your background, skills, experience, and more!")
+st.title("Vamshi's Chatbot")
+st.markdown("Ask me")
 
 # Load RAG pipeline
 @st.cache_resource

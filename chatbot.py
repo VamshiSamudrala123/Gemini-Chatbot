@@ -77,7 +77,7 @@ def create_qa_chain(vectorstore):
     retriever = vectorstore.as_retriever()
     prompt = get_custom_prompt()
 
-    llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest", temperature=0.3)
+    llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-thinking-exp-01-21", temperature=0.3)
 
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 

@@ -2,9 +2,14 @@ import streamlit as st
 import time
 from chatbot import load_documents, split_documents, create_vectorstore, create_qa_chain
 
-st.title("Vamshi's Chatbot")
-st.markdown("Please ask anything about Vamshi")
+# Page config
+st.set_page_config(page_title="Vamshi's Chatbot", layout="centered")
 
+# Title
+st.title("💬 Vamshi's Chatbot")
+st.markdown("Ask anything about **Vamshi**!")
+
+# Load chain (cached)
 @st.cache_resource
 def load_chain():
     documents = load_documents()
@@ -16,25 +21,27 @@ qa_chain = load_chain()
 
 # Initialize chat history
 if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
+    st.session_state.chat_history = []  # stores tuples of (sender, message)
 
-query = st.text_input("Ask a question:")
+# Multiline input for better UX
+query = st.chat_input("Ask your question here...")
 
 if query:
+    st.session_state.chat_history.append(("user", query))
     with st.spinner("Thinking..."):
         response = qa_chain.run(query)
-        st.session_state.chat_history.insert(0, ("You", query))   # newest on top
-        st.session_state.chat_history.insert(0, ("Bot", response))  # newest on top
+        st.session_state.chat_history.append(("bot", response))
 
-# Display chat with most recent on top
+# Chat display
 for sender, message in st.session_state.chat_history:
-    if sender == "Bot":
-        with st.container():
+    with st.chat_message("user" if sender == "user" else "assistant"):
+        if sender == "bot":
             placeholder = st.empty()
-            full_message = ""
+            full_msg = ""
             for word in message.split():
-                full_message += word + " "
-                placeholder.markdown(f"**🤖 Bot:** {full_message}")
-                time.sleep(0.07)  # word delay
-    elif sender == "You":
-        st.markdown(f"**🧑 You:** {message}")
+                full_msg += word + " "
+                placeholder.markdown(full_msg + "▌")  # simulate typing cursor
+                time.sleep(0.05)
+            placeholder.markdown(full_msg)
+        else:
+            st.markdown(message)

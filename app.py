@@ -33,14 +33,18 @@ if query:
         st.session_state.chat_history.append(("bot", response))
 
 # Chat display
-for sender, message in st.session_state.chat_history:
+for i, (sender, message) in enumerate(st.session_state.chat_history):
     with st.chat_message("user" if sender == "user" else "assistant"):
-        if sender == "bot":
+        # Only animate the last message if it's a bot response
+        is_last = i == len(st.session_state.chat_history) - 1
+        is_bot = sender == "bot"
+
+        if is_last and is_bot:
             placeholder = st.empty()
             full_msg = ""
             for word in message.split():
                 full_msg += word + " "
-                placeholder.markdown(full_msg + "▌")  # simulate typing cursor
+                placeholder.markdown(full_msg + "▌")
                 time.sleep(0.05)
             placeholder.markdown(full_msg)
         else:

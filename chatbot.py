@@ -5,7 +5,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGener
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import TextLoader
-from langchain.chains import RetrievalQA
+from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 import streamlit as st
 
@@ -79,12 +79,13 @@ def create_qa_chain(vectorstore):
 
     llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-thinking-exp-01-21", temperature=0.3)
 
-    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True, input_key="question")
 
-    return RetrievalQA.from_chain_type(
+    return ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=retriever,
-        chain_type_kwargs={"prompt": prompt}
+        memory=memory,
+        combine_docs_chain_kwargs={"prompt": prompt}
     )
 
 
@@ -102,8 +103,9 @@ def main():
         if query.lower() == "exit":
             print("👋 Bye!")
             break
-        response = qa_chain.run(query)
-        print(f"Bot: {response}")
+        response = qa_chain.invoke({"question": query})
+        answer = response["answer"]
+        print(f"Bot: {answer}")
 
 if __name__ == "__main__":
     main()

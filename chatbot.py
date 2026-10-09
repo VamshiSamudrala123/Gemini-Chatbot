@@ -1,111 +1,233 @@
-import os
-from dotenv import load_dotenv
+"""Session-owned chat orchestration, with provider-independent core logic."""
 
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
-from langchain.text_splitter import CharacterTextSplitter
-from langchain_community.vectorstores import FAISS
-from langchain_community.document_loaders import TextLoader
-from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferMemory
-import streamlit as st
+from collections import deque
+from dataclasses import dataclass
+import hashlib
+import math
+from pathlib import Path
+import re
+from threading import Lock
+import time
+from typing import Callable, Iterable
 
-# Load API key from .env
-load_dotenv()
-os.environ["GOOGLE_API_KEY"] = st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
+from settings import Settings
 
-# 1. Load documents from 'data/' folder
-def load_documents():
+DATA_DIR = Path(__file__).resolve().parent / "data"
+UNKNOWN = "I'm not sure based on the portfolio documents I have."
+
+
+@dataclass(frozen=True)
+class Document:
+    text: str
+    source: str
+    section: str
+    start_line: int
+    chunk_id: str = ""
+
+
+@dataclass(frozen=True)
+class Source:
+    id: str
+    document: Document
+    similarity: float | None = None
+
+
+@dataclass(frozen=True)
+class Answer:
+    text: str
+    sources: tuple[Source, ...] = ()
+
+
+def load_documents(data_dir: Path = DATA_DIR) -> list[Document]:
+    """Split Markdown-style text into sections, preserving file and line metadata."""
     documents = []
-    for filename in os.listdir("data"):
-        if filename.endswith(".txt"):
-            loader = TextLoader(os.path.join("data", filename))
-            documents.extend(loader.load())
+    for path in sorted(Path(data_dir).glob("*.txt")):
+        section, lines, start = "Overview", [], 1
+        headings = []
+        for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if re.match(r"^#{1,6}\s+", line):
+                text = "\n".join(lines).strip()
+                if text and text != "---":
+                    documents.append(Document(text, path.name, section, start))
+                level = len(line) - len(line.lstrip("#"))
+                title = re.sub(r"^#{1,6}\s+", "", line).replace("**", "").strip()
+                headings = [(depth, heading) for depth, heading in headings if depth < level]
+                headings.append((level, title))
+                section = " / ".join(heading for _, heading in headings)
+                lines, start = [line], number
+            else:
+                lines.append(line)
+        text = "\n".join(lines).strip()
+        if text and text != "---":
+            documents.append(Document(text, path.name, section, start))
+    if not documents:
+        raise ValueError("No non-empty .txt portfolio documents found in data/.")
     return documents
 
-# 2. Split documents into chunks
-def split_documents(documents):
-    splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
-    return splitter.split_documents(documents)
 
-# 3. Create embeddings and FAISS vector store
-#def create_vectorstore(chunks):
-    #embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+def split_documents(documents: Iterable[Document]) -> list[Document]:
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-    #print("Number of chunks:", len(chunks))
-    #print("First chunk:", chunks[0] if chunks else "No chunks loaded")
-
-    #print("Testing embeddings...")
-    #print("Sample embedding:", embeddings.embed_query("Hello world"))
-
-    #print("Testing embeddings...")
-    #try:
-       # result = embeddings.embed_query("Hello world")
-       # print("Sample embedding length:", len(result))
-    #except Exception as e:
-       # print("Embedding failed:", e)
-
-
-    #return FAISS.from_documents(chunks, embeddings)
-
-# 3. Create embeddings and FAISS vector store
-def create_vectorstore(chunks):
-    if len(chunks) == 0:
-        raise ValueError("❌ No document chunks found. Please check your 'data/' folder.")
-
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-
-    # Optional: test the embedding model
-    print("🔍 Testing embeddings...")
-    try:
-        result = embeddings.embed_query("Hello world")
-        print("✅ Sample embedding length:", len(result))
-    except Exception as e:
-        raise RuntimeError(f"❌ Embedding failed: {e}")
-
-    return FAISS.from_documents(chunks, embeddings)
-
-
-# 4. Create RAG pipeline with Gemini
-#def create_qa_chain(vectorstore):
-    #retriever = vectorstore.as_retriever()
-    #llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp-image-generation", temperature=0.3)
-    #return RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
-
-from prompt import get_custom_prompt  # import your function
-
-def create_qa_chain(vectorstore):
-    retriever = vectorstore.as_retriever()
-    prompt = get_custom_prompt()
-
-    llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-thinking-exp-01-21", temperature=0.3)
-
-    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True, input_key="question")
-
-    return ConversationalRetrievalChain.from_llm(
-        llm=llm,
-        retriever=retriever,
-        memory=memory,
-        combine_docs_chain_kwargs={"prompt": prompt}
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1200, chunk_overlap=150, add_start_index=True,
     )
+    chunks = []
+    for document in documents:
+        for part in splitter.create_documents([document.text]):
+            offset = max(0, part.metadata["start_index"])
+            line = document.start_line + document.text[:offset].count("\n")
+            fingerprint = f"{document.source}:{line}:{part.page_content}"
+            chunks.append(Document(
+                part.page_content, document.source, document.section, line,
+                hashlib.sha256(fingerprint.encode()).hexdigest()[:16],
+            ))
+    if not chunks:
+        raise ValueError("No document chunks found.")
+    return chunks
 
 
-# 5. Main chatbot loop
+class UserInputError(ValueError):
+    pass
+
+
+class RateLimitError(UserInputError):
+    pass
+
+
+class RequestLimiter:
+    """Thread-safe rolling budget. Contains timestamps only, never chat contents."""
+
+    def __init__(self, limit: int, clock: Callable = time.monotonic):
+        self.limit, self.clock = limit, clock
+        self.timestamps = deque()
+        self.lock = Lock()
+
+    def acquire(self):
+        with self.lock:
+            now = self.clock()
+            while self.timestamps and self.timestamps[0] <= now - 60:
+                self.timestamps.popleft()
+            if len(self.timestamps) >= self.limit:
+                raise RateLimitError("Too many requests. Please wait a minute and try again.")
+            self.timestamps.append(now)
+
+
+def validate_question(question: str, settings: Settings) -> str:
+    question = question.strip()
+    if not question:
+        raise UserInputError("Please enter a question.")
+    if len(question) > settings.max_question_chars:
+        raise UserInputError(f"Keep questions under {settings.max_question_chars} characters.")
+    return question
+
+
+def cited_sources(text: str, sources: tuple[Source, ...]) -> tuple[Source, ...]:
+    ids = set(re.findall(r"\[(S\d+)\]", text))
+    return tuple(source for source in sources if source.id in ids)
+
+
+class ChatService:
+    """One instance per session; successful turns commit only after streaming ends."""
+
+    def __init__(self, settings: Settings, retrieve, answer_chain, rewrite_chain,
+                 process_limiter: RequestLimiter | None = None):
+        self.settings = settings
+        self.retrieve = retrieve
+        self.answer_chain, self.rewrite_chain = answer_chain, rewrite_chain
+        self.process_limiter = process_limiter
+        self.session_limiter = RequestLimiter(settings.session_requests_per_minute)
+        self.history: list[tuple[str, str]] = []
+        self.last_answer: Answer | None = None
+
+    def reset(self):
+        self.history.clear()
+        self.last_answer = None
+        # Keep budgets across New Chat.
+
+    def stream(self, question: str):
+        question = validate_question(question, self.settings)
+        self.last_answer = None
+        self.session_limiter.acquire()
+        if self.process_limiter is not None:
+            self.process_limiter.acquire()
+        history = list(self.history)
+        query = question
+        if history and self.settings.retrieval_mode == "rag":
+            query = self.rewrite_chain.invoke({"history": history, "question": question}).strip()
+            query = query[:self.settings.max_question_chars] or question
+        candidates = self.retrieve(query)
+        candidates = [
+            (doc, score) for doc, score in candidates
+            if score is None or (math.isfinite(score) and score >= self.settings.min_similarity)
+        ]
+        sources = tuple(Source(f"S{i}", doc, score)
+                        for i, (doc, score) in enumerate(candidates, 1))
+        pieces = []
+        if not sources:
+            pieces.append(UNKNOWN)
+            yield UNKNOWN
+        else:
+            context = "\n\n".join(
+                f"[{s.id}] {s.document.source} | {s.document.section}\n{s.document.text}"
+                for s in sources
+            )
+            for piece in self.answer_chain.stream({
+                "history": history, "question": question, "context": context,
+            }):
+                if piece:
+                    pieces.append(piece)
+                    yield piece
+        text = "".join(pieces).strip()
+        used = cited_sources(text, sources)
+        # Empty/blocked responses and uncited claims never enter conversation memory.
+        if not text:
+            raise RuntimeError("The model returned no answer. Please try again.")
+        if sources and text != UNKNOWN and not used:
+            text = UNKNOWN
+        allowed = {source.id for source in sources}
+        if set(re.findall(r"\[(S\d+)\]", text)) - allowed:
+            text, used = UNKNOWN, ()
+        self.last_answer = Answer(text, used)
+        self.history.extend([("human", question), ("ai", text)])
+        self.history = self.history[-2 * self.settings.history_turns:]
+
+
 def main():
-    print("📚 Loading documents...")
-    documents = load_documents()
-    chunks = split_documents(documents)
-    vectorstore = create_vectorstore(chunks)
-    qa_chain = create_qa_chain(vectorstore)
-    print("🤖 Chatbot is ready. Ask a question! Type 'exit' to quit.")
-    
+    from dotenv import load_dotenv
+    from providers import create_service, create_vectorstore
+    from settings import load_settings
+
+    load_dotenv(Path(__file__).resolve().parent / ".env")
+    try:
+        settings = load_settings()
+        chunks = split_documents(load_documents())
+        index = create_vectorstore(chunks, settings) if settings.retrieval_mode == "rag" else None
+        service = create_service(chunks, settings, index)
+    except Exception:
+        print("Could not initialize. Check configuration, portfolio files, and API access.")
+        return 1
+    print("Vamshi's portfolio chatbot. Type 'exit' to quit or 'new' to clear the chat.")
     while True:
-        query = input("\nYou: ")
-        if query.lower() == "exit":
-            print("👋 Bye!")
-            break
-        response = qa_chain.invoke({"question": query})
-        answer = response["answer"]
-        print(f"Bot: {answer}")
+        try:
+            question = input("\nYou: ")
+            if question.strip().lower() == "exit":
+                return 0
+            if question.strip().lower() == "new":
+                service.reset()
+                print("New chat started.")
+                continue
+            # Buffer terminal output so only the finalized, citation-checked answer displays.
+            list(service.stream(question))
+            print(f"Bot: {service.last_answer.text}")
+            for source in service.last_answer.sources:
+                print(f"[{source.id}] {source.document.source}: {source.document.section}")
+        except (EOFError, KeyboardInterrupt):
+            return 0
+        except UserInputError as exc:
+            print(str(exc))
+        except Exception:
+            print("Request failed. Check API access or try again shortly.")
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

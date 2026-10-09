@@ -1,0 +1,12 @@
+[
+  {"question": "Where did Vamshi complete his master's?", "expected_section": "Education"},
+  {"question": "What time-series models did he use at Infosys?", "expected_section": "Professional Experience"},
+  {"question": "Tell me about the Tesla trading project.", "expected_section": "Tesla"},
+  {"question": "Which anomaly detection algorithms did Vamshi use?", "expected_section": "Anomaly"},
+  {"question": "How did Vamshi segment satellite images?", "expected_section": "Segmentation"},
+  {"question": "What was the cancer classification capstone?", "expected_section": "Education"},
+  {"question": "What languages does Vamshi use?", "expected_section": "Technical Skill"},
+  {"question": "Give me a sourdough recipe.", "unrelated": true},
+  {"question": "What is Vamshi's current salary?", "unavailable": true},
+  {"question": "Is the reported 22% early-risk accuracy verified?", "unverified": true}
+]

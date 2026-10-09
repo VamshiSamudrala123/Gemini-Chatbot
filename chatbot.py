@@ -86,7 +86,11 @@ def split_documents(documents: Iterable[Document]) -> list[Document]:
     return chunks
 
 
-class RateLimitError(ValueError):
+class UserInputError(ValueError):
+    pass
+
+
+class RateLimitError(UserInputError):
     pass
 
 
@@ -111,9 +115,9 @@ class RequestLimiter:
 def validate_question(question: str, settings: Settings) -> str:
     question = question.strip()
     if not question:
-        raise ValueError("Please enter a question.")
+        raise UserInputError("Please enter a question.")
     if len(question) > settings.max_question_chars:
-        raise ValueError(f"Keep questions under {settings.max_question_chars} characters.")
+        raise UserInputError(f"Keep questions under {settings.max_question_chars} characters.")
     return question
 
 
@@ -219,7 +223,7 @@ def main():
                 print(f"[{source.id}] {source.document.source}: {source.document.section}")
         except (EOFError, KeyboardInterrupt):
             return 0
-        except ValueError as exc:
+        except UserInputError as exc:
             print(str(exc))
         except Exception:
             print("Request failed. Check API access or try again shortly.")

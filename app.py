@@ -4,7 +4,7 @@ from pathlib import Path
 import streamlit as st
 from dotenv import load_dotenv
 
-from chatbot import RequestLimiter, load_documents, split_documents, validate_question
+from chatbot import RequestLimiter, UserInputError, load_documents, split_documents, validate_question
 from providers import create_service, create_vectorstore
 from settings import load_settings
 
@@ -108,13 +108,7 @@ if query:
             {"role": "assistant", "text": answer.text, "sources": answer.sources},
         ])
         st.session_state.messages = st.session_state.messages[-40:]
-    except ValueError as exc:
-        # Only user validation and rate-limit messages are exposed. Provider/config
-        # failures may contain request URLs or secrets, so use a fixed message.
-        from chatbot import RateLimitError
-        if isinstance(exc, RateLimitError) or str(exc).startswith(("Please enter", "Keep questions")):
-            st.warning(str(exc))
-        else:
-            st.error("Could not prepare the chatbot. Check configuration and portfolio files.")
+    except UserInputError as exc:
+        st.warning(str(exc))
     except Exception:
         st.error("Gemini could not complete this request. Check API access, quota, and model settings, then try again.")

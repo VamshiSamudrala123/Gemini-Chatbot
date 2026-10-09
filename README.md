@@ -37,6 +37,14 @@ Never commit .env or .streamlit/secrets.toml. Model availability and quota depen
 on your Google project. These defaults were checked against Google's docs on
 October 9, 2026; model IDs can change without editing application code.
 
+If the app says the key was not found after you added it, use exactly
+`GOOGLE_API_KEY = "your-key"` at the top level of this app's Streamlit secrets,
+above any `[section]` header. GitHub Actions secrets do not configure a Streamlit
+deployment. Save the app secrets and reboot the app. For a local run, keep .env
+beside app.py and restart Streamlit. A blank Streamlit secret overrides .env.
+Other invalid configuration values are reported by field name without printing
+their contents or the key.
+
 | Setting | Default | Purpose |
 | --- | --- | --- |
 | GEMINI_CHAT_MODEL | gemini-3.8-flash | Generation and follow-up rewriting |
@@ -103,8 +111,9 @@ pip-compile --strip-extras --output-file=requirements.txt requirements.in
 requirements.txt contains the complete runtime dependency lock generated on Python 3.12.
 The offline unit suite needs only the Python standard library. Integration tests
 use real FAISS, LangChain runnables, SDK construction, and Streamlit AppTest with
-fake providers; they make no live API requests. All 26 tests, lint, dependency checks,
-and lock generation passed in GitHub Actions during this update.
+fake providers; they make no live API requests. GitHub Actions checks configuration
+diagnostics, secret loading, chat behavior, installed integrations, lint, dependencies,
+and lock generation.
 Update exact direct pins in requirements.in, regenerate the complete lock, and
 rerun checks before upgrading.
 

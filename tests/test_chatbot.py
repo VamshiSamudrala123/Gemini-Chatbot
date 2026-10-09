@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import patch
 
 from chatbot import ChatService, Document, RateLimitError, RequestLimiter, UNKNOWN, load_documents
-from settings import Settings, load_settings
+from settings import ConfigurationError, MissingAPIKeyError, Settings, load_settings
 
 DOC = Document("Vamshi studied Data Science at Pace University.", "data.txt", "Education", 10)
 
@@ -198,6 +198,42 @@ class InfrastructureTests(unittest.TestCase):
                 load_settings({"GOOGLE_API_KEY": "fake-key", **values})
         with self.assertRaises(ValueError):
             replace(Settings("fake-key"), history_turns=0)
+
+    def test_invalid_optional_setting_identifies_field_without_exposing_values(self):
+        for name in ("RETRIEVAL_K", "MIN_SIMILARITY", "SESSION_REQUESTS_PER_MINUTE",
+                     "PROCESS_REQUESTS_PER_MINUTE"):
+            with self.subTest(name=name):
+                with self.assertRaises(ConfigurationError) as caught:
+                    load_settings({"GOOGLE_API_KEY": "private-key", name: "private-value"})
+                self.assertIn(name, str(caught.exception))
+                self.assertNotIn("private-key", str(caught.exception))
+                self.assertNotIn("private-value", str(caught.exception))
+                self.assertNotIsInstance(caught.exception, MissingAPIKeyError)
+
+    def test_nested_key_has_actionable_diagnostic(self):
+        with patch.dict("os.environ", {}, clear=True):
+            with self.assertRaises(ConfigurationError) as caught:
+                load_settings({"google": {"GOOGLE_API_KEY": "private-key"}})
+        self.assertIn("above every [section]", str(caught.exception))
+        self.assertNotIn("private-key", str(caught.exception))
+
+    def test_blank_secret_reports_that_it_overrides_environment(self):
+        with patch.dict("os.environ", {"GOOGLE_API_KEY": "env-key"}, clear=True):
+            with self.assertRaises(MissingAPIKeyError) as caught:
+                load_settings({"GOOGLE_API_KEY": ""})
+        self.assertIn("overrides", str(caught.exception))
+
+    def test_top_level_secret_alone_loads_defaults(self):
+        with patch.dict("os.environ", {}, clear=True):
+            settings = load_settings({"GOOGLE_API_KEY": "  private-key  "})
+        self.assertEqual(settings.api_key, "private-key")
+        self.assertEqual(settings.retrieval_k, 4)
+        self.assertEqual(settings.retrieval_mode, "rag")
+
+    def test_boolean_and_fractional_integer_settings_are_rejected(self):
+        for value in (True, 3.5):
+            with self.assertRaises(ConfigurationError):
+                load_settings({"GOOGLE_API_KEY": "fake-key", "RETRIEVAL_K": value})
 
 
 if __name__ == "__main__":

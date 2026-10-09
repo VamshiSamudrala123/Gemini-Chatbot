@@ -5,6 +5,14 @@ import os
 from typing import Mapping
 
 
+class ConfigurationError(ValueError):
+    """Safe, field-specific diagnostics that never include configured values."""
+
+
+class MissingAPIKeyError(ConfigurationError):
+    pass
+
+
 @dataclass(frozen=True)
 class Settings:
     api_key: str = field(repr=False)
@@ -20,21 +28,21 @@ class Settings:
     max_direct_context_chars: int = 30000
 
     def __post_init__(self):
-        if not self.api_key.strip():
-            raise ValueError("Set GOOGLE_API_KEY in .env or Streamlit secrets.")
+        if not isinstance(self.api_key, str) or not self.api_key.strip():
+            raise MissingAPIKeyError("GOOGLE_API_KEY is missing or empty.")
         if not self.chat_model.strip() or not self.embedding_model.strip():
-            raise ValueError("Model IDs cannot be empty.")
+            raise ConfigurationError("GEMINI_CHAT_MODEL and GEMINI_EMBEDDING_MODEL cannot be empty.")
         if self.retrieval_mode not in {"rag", "direct"}:
-            raise ValueError("RETRIEVAL_MODE must be rag or direct.")
+            raise ConfigurationError("RETRIEVAL_MODE must be rag or direct.")
         if not 1 <= self.retrieval_k <= 12:
-            raise ValueError("RETRIEVAL_K must be between 1 and 12.")
+            raise ConfigurationError("RETRIEVAL_K must be between 1 and 12.")
         if not 0 <= self.min_similarity <= 1:
-            raise ValueError("MIN_SIMILARITY must be between 0 and 1.")
+            raise ConfigurationError("MIN_SIMILARITY must be between 0 and 1.")
         for name in ("max_question_chars", "history_turns",
                      "session_requests_per_minute", "process_requests_per_minute",
                      "max_direct_context_chars"):
             if getattr(self, name) < 1:
-                raise ValueError(f"{name} must be positive.")
+                raise ConfigurationError(f"{name.upper()} must be positive.")
 
 
 def load_settings(secrets: Mapping | None = None) -> Settings:
@@ -44,20 +52,60 @@ def load_settings(secrets: Mapping | None = None) -> Settings:
     def value(name, default):
         return secrets.get(name, os.getenv(name, default))
 
-    try:
-        return Settings(
-            api_key=str(value("GOOGLE_API_KEY", "")),
-            chat_model=str(value("GEMINI_CHAT_MODEL", "gemini-3.8-flash")),
-            embedding_model=str(value("GEMINI_EMBEDDING_MODEL", "gemini-embedding-001")),
-            retrieval_mode=str(value("RETRIEVAL_MODE", "rag")),
-            retrieval_k=int(value("RETRIEVAL_K", 4)),
-            min_similarity=float(value("MIN_SIMILARITY", 0.35)),
-            session_requests_per_minute=int(value("SESSION_REQUESTS_PER_MINUTE", 10)),
-            process_requests_per_minute=int(value("PROCESS_REQUESTS_PER_MINUTE", 60)),
+    api_key = value("GOOGLE_API_KEY", "")
+    if not isinstance(api_key, str):
+        raise ConfigurationError("GOOGLE_API_KEY must be a quoted text value.")
+    if not api_key.strip():
+        nested = any(
+            isinstance(section, Mapping) and "GOOGLE_API_KEY" in section
+            for section in secrets.values()
         )
-    except (TypeError, ValueError) as exc:
-        # Configuration may include a secret, so do not echo raw values.
-        raise ValueError(
-            "Check GOOGLE_API_KEY, model IDs, RETRIEVAL_MODE, RETRIEVAL_K, "
-            "MIN_SIMILARITY, and request limits. See .env.example."
-        ) from exc
+        if nested:
+            raise ConfigurationError(
+                "GOOGLE_API_KEY is inside a TOML section. Move it above every "
+                "[section] header in Streamlit secrets."
+            )
+        if "GOOGLE_API_KEY" in secrets:
+            raise MissingAPIKeyError(
+                "GOOGLE_API_KEY in Streamlit secrets is empty. "
+                "A blank secret overrides the environment value."
+            )
+        raise MissingAPIKeyError(
+            "GOOGLE_API_KEY was not found. Add it in this Streamlit app's Settings > Secrets "
+            "or in .env beside app.py when running locally."
+        )
+
+    def text(name, default):
+        result = value(name, default)
+        if not isinstance(result, str) or not result.strip():
+            raise ConfigurationError(f"{name} must be a non-empty text value.")
+        return result.strip()
+
+    def integer(name, default):
+        result = value(name, default)
+        if isinstance(result, bool) or not isinstance(result, (int, str)):
+            raise ConfigurationError(f"{name} must be an integer.")
+        try:
+            return int(result)
+        except ValueError:
+            raise ConfigurationError(f"{name} must be an integer.") from None
+
+    def number(name, default):
+        result = value(name, default)
+        if isinstance(result, bool) or not isinstance(result, (int, float, str)):
+            raise ConfigurationError(f"{name} must be a number.")
+        try:
+            return float(result)
+        except ValueError:
+            raise ConfigurationError(f"{name} must be a number.") from None
+
+    return Settings(
+        api_key=api_key.strip(),
+        chat_model=text("GEMINI_CHAT_MODEL", "gemini-3.8-flash"),
+        embedding_model=text("GEMINI_EMBEDDING_MODEL", "gemini-embedding-001"),
+        retrieval_mode=text("RETRIEVAL_MODE", "rag"),
+        retrieval_k=integer("RETRIEVAL_K", 4),
+        min_similarity=number("MIN_SIMILARITY", 0.35),
+        session_requests_per_minute=integer("SESSION_REQUESTS_PER_MINUTE", 10),
+        process_requests_per_minute=integer("PROCESS_REQUESTS_PER_MINUTE", 60),
+    )

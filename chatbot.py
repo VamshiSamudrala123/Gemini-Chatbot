@@ -10,6 +10,7 @@ from threading import Lock
 import time
 from typing import Callable, Iterable
 
+from diagnostics import classify_failure, provider_operation
 from settings import Settings
 
 DATA_DIR = Path(__file__).resolve().parent / "data"
@@ -153,7 +154,8 @@ class ChatService:
         history = list(self.history)
         query = question
         if history and self.settings.retrieval_mode == "rag":
-            query = self.rewrite_chain.invoke({"history": history, "question": question}).strip()
+            with provider_operation("rewrite"):
+                query = self.rewrite_chain.invoke({"history": history, "question": question}).strip()
             query = query[:self.settings.max_question_chars] or question
         candidates = self.retrieve(query)
         candidates = [
@@ -171,12 +173,13 @@ class ChatService:
                 f"[{s.id}] {s.document.source} | {s.document.section}\n{s.document.text}"
                 for s in sources
             )
-            for piece in self.answer_chain.stream({
-                "history": history, "question": question, "context": context,
-            }):
-                if piece:
-                    pieces.append(piece)
-                    yield piece
+            with provider_operation("generation"):
+                for piece in self.answer_chain.stream({
+                    "history": history, "question": question, "context": context,
+                }):
+                    if piece:
+                        pieces.append(piece)
+                        yield piece
         text = "".join(pieces).strip()
         used = cited_sources(text, sources)
         # Empty/blocked responses and uncited claims never enter conversation memory.
@@ -225,8 +228,8 @@ def main():
             return 0
         except UserInputError as exc:
             print(str(exc))
-        except Exception:
-            print("Request failed. Check API access or try again shortly.")
+        except Exception as exc:
+            print(classify_failure(exc).message)
 
 
 if __name__ == "__main__":

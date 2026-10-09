@@ -63,6 +63,39 @@ class IntegrationTests(unittest.TestCase):
         self.assertFalse(app.exception)
         self.assertTrue(app.info)
 
+    def test_ui_reads_a_top_level_streamlit_secret(self):
+        from streamlit.testing.v1 import AppTest
+        with patch.dict(os.environ, {}, clear=True):
+            app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"))
+            app.secrets["GOOGLE_API_KEY"] = "private-key"
+            app.run()
+        self.assertFalse(app.exception)
+        self.assertFalse(app.info)
+        self.assertTrue(app.chat_input)
+
+    def test_ui_invalid_optional_setting_does_not_claim_key_is_missing(self):
+        from streamlit.testing.v1 import AppTest
+        with patch.dict(os.environ, {}, clear=True):
+            app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"))
+            app.secrets["GOOGLE_API_KEY"] = "private-key"
+            app.secrets["RETRIEVAL_K"] = "private-invalid-value"
+            app.run()
+        self.assertFalse(app.exception)
+        self.assertFalse(app.info)
+        self.assertIn("RETRIEVAL_K", app.error[0].value)
+        self.assertNotIn("private-key", app.error[0].value)
+        self.assertNotIn("private-invalid-value", app.error[0].value)
+
+    def test_ui_nested_secret_explains_top_level_requirement(self):
+        from streamlit.testing.v1 import AppTest
+        with patch.dict(os.environ, {}, clear=True):
+            app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"))
+            app.secrets["google"] = {"GOOGLE_API_KEY": "private-key"}
+            app.run()
+        self.assertFalse(app.exception)
+        self.assertIn("TOML section", app.error[0].value)
+        self.assertNotIn("private-key", app.error[0].value)
+
     def test_ui_chat_and_new_chat_use_session_state(self):
         from streamlit.testing.v1 import AppTest
         from test_chatbot import make_service

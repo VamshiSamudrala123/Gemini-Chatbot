@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 from chatbot import RequestLimiter, UserInputError, load_documents, split_documents, validate_question
 from providers import create_service, create_vectorstore
-from settings import load_settings
+from settings import ConfigurationError, MissingAPIKeyError, load_settings
 
 st.set_page_config(page_title="Vamshi's Portfolio Chat", page_icon="💬", layout="centered")
 load_dotenv(Path(__file__).resolve().parent / ".env")
@@ -43,8 +43,14 @@ try:
     except FileNotFoundError:
         secrets = {}
     settings = load_settings(secrets)
+except MissingAPIKeyError as exc:
+    st.info(str(exc))
+    st.stop()
+except ConfigurationError as exc:
+    st.error(f"Configuration error: {exc}")
+    st.stop()
 except ValueError:
-    st.info("Add GOOGLE_API_KEY to .env or Streamlit secrets to start chatting. See README.md for configuration.")
+    st.error("Could not read Streamlit secrets. Check the TOML syntax in the app's Settings > Secrets.")
     st.stop()
 
 if "messages" not in st.session_state:

@@ -100,9 +100,11 @@ pip check
 pip-compile --strip-extras --output-file=requirements.txt requirements.in
 ```
 
+requirements.txt contains the complete runtime dependency lock generated on Python 3.12.
 The offline unit suite needs only the Python standard library. Integration tests
 use real FAISS, LangChain runnables, SDK construction, and Streamlit AppTest with
-fake providers; they make no live API requests. GitHub Actions runs these checks.
+fake providers; they make no live API requests. All 26 tests, lint, dependency checks,
+and lock generation passed in GitHub Actions during this update.
 Update exact direct pins in requirements.in, regenerate the complete lock, and
 rerun checks before upgrading.
 

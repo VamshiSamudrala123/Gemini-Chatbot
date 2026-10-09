@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from chatbot import ChatService, Document
+from diagnostics import provider_operation
 from prompt import build_runnables
 from settings import Settings
 
@@ -41,9 +42,10 @@ def create_vectorstore(chunks: list[Document], settings: Settings, embeddings=No
     if not chunks:
         raise ValueError("No document chunks found.")
     embeddings = embeddings or create_embeddings(settings)
-    values = np.asarray(
-        embeddings.embed_documents([f"{doc.section}\n{doc.text}" for doc in chunks]), dtype="float32",
-    )
+    with provider_operation("embedding"):
+        values = np.asarray(
+            embeddings.embed_documents([f"{doc.section}\n{doc.text}" for doc in chunks]), dtype="float32",
+        )
     if (values.ndim != 2 or values.shape[0] != len(chunks)
             or not np.isfinite(values).all() or (np.linalg.norm(values, axis=1) == 0).any()):
         raise ValueError("Invalid document embeddings.")
@@ -72,5 +74,6 @@ def create_service(chunks, settings, index=None, process_limiter=None):
         # The query client belongs to this session, not the globally cached index.
         embeddings = create_embeddings(settings)
         def retrieve(query):
-            return index.search(embeddings.embed_query(query), settings.retrieval_k)
+            with provider_operation("retrieval"):
+                return index.search(embeddings.embed_query(query), settings.retrieval_k)
     return ChatService(settings, retrieve, answer, rewrite, process_limiter)

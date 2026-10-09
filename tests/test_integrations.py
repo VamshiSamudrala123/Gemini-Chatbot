@@ -113,6 +113,24 @@ class IntegrationTests(unittest.TestCase):
                 self.assertEqual(app.session_state["messages"], [])
                 self.assertEqual(app.session_state["service"].history, [])
 
+    def test_direct_mode_skips_embeddings_and_shows_safe_provider_failure(self):
+        from streamlit.testing.v1 import AppTest
+        from test_diagnostics import SDKError
+        with patch.dict(os.environ, {}, clear=True):
+            with patch("providers.create_vectorstore") as build_index, patch(
+                "providers.create_service", side_effect=SDKError(429, "private-secret"),
+            ):
+                app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"))
+                app.secrets["GOOGLE_API_KEY"] = "private-key"
+                app.secrets["RETRIEVAL_MODE"] = "direct"
+                app.run()
+                app.chat_input[0].set_value("What are Vamshi's skills?").run()
+        build_index.assert_not_called()
+        self.assertFalse(app.exception)
+        self.assertIn("HTTP 429", app.error[0].value)
+        self.assertNotIn("private-secret", app.error[0].value)
+        self.assertNotIn("private-key", app.error[0].value)
+
 
 if __name__ == "__main__":
     unittest.main()

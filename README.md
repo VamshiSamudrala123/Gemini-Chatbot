@@ -45,6 +45,25 @@ beside app.py and restart Streamlit. A blank Streamlit secret overrides .env.
 Other invalid configuration values are reported by field name without printing
 their contents or the key.
 
+For a simple free-tier check, keep your key and add these top-level settings:
+
+```toml
+RETRIEVAL_MODE = "direct"
+GEMINI_CHAT_MODEL = "gemini-3.5-flash-lite"
+```
+
+Direct mode skips embeddings and follow-up rewriting, so it makes only the answer
+request. Save secrets and reboot. Google's pricing documentation lists a free tier
+for this model, but the actual model quotas and eligibility depend on your project.
+Check them in Google AI Studio rather than assuming billing is required.
+
+Failures show the operation and recognized Google HTTP status without exposing
+the raw exception, key, URL, or conversation. HTTP 429 means a quota/rate limit;
+check RPM, TPM, and daily quotas (and whether the applicable limit is zero).
+HTTP 403 indicates denied access, HTTP 404 indicates a missing model/resource,
+and HTTP 400 may indicate invalid parameters, a rejected key, or free-tier
+eligibility. Unknown internal errors are not attributed to Google.
+
 | Setting | Default | Purpose |
 | --- | --- | --- |
 | GEMINI_CHAT_MODEL | gemini-3.8-flash | Generation and follow-up rewriting |

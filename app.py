@@ -5,6 +5,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from chatbot import RequestLimiter, UserInputError, load_documents, split_documents, validate_question
+from diagnostics import classify_failure
 from providers import create_service, create_vectorstore
 from settings import ConfigurationError, MissingAPIKeyError, load_settings
 
@@ -83,17 +84,20 @@ for message in st.session_state.messages:
 
 query = st.chat_input("Ask about my portfolio…", max_chars=settings.max_question_chars) or query
 if query:
+    phase = "prepare"
     try:
         query = validate_question(query, settings)
         if "service" not in st.session_state or st.session_state.get("settings") != settings:
             with st.spinner("Preparing portfolio…"):
                 chunks = tuple(split_documents(load_documents()))
                 index = load_index(chunks, settings) if settings.retrieval_mode == "rag" else None
+                phase = "setup"
                 st.session_state.service = create_service(
                     chunks, settings, index, process_budget(settings.process_requests_per_minute),
                 )
                 st.session_state.settings = settings
         service = st.session_state.service
+        phase = "generation"
         with st.chat_message("user"):
             st.markdown(query)
         with st.chat_message("assistant"):
@@ -116,5 +120,5 @@ if query:
         st.session_state.messages = st.session_state.messages[-40:]
     except UserInputError as exc:
         st.warning(str(exc))
-    except Exception:
-        st.error("Gemini could not complete this request. Check API access, quota, and model settings, then try again.")
+    except Exception as exc:
+        st.error(classify_failure(exc, phase).message)

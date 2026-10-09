@@ -1,7 +1,3 @@
-Thanks for sharing all of this, Vamshi! That’s an impressive background with solid hands-on experience, academic projects, and technical depth. Here's how we can **refine and structure everything** into a **clean, professional narrative**, especially if you're planning to use it for LinkedIn, a personal website, or introductions during interviews. I’ve also added your **schooling** and formatted your **Tesla and Anomaly Detection projects** properly.
-
----
-
 ## 👋 Hi, I'm Vamshi – Data Scientist | ML Engineer | Big Data Enthusiast
 
 I bring **3+ years of hands-on experience** in **machine learning**, **big data engineering**, and **real-time analytics**. My work bridges the gap between raw data and actionable insights—building predictive models, automating workflows, and delivering intelligent systems that make a tangible impact across industries.
@@ -25,7 +21,7 @@ I bring **3+ years of hands-on experience** in **machine learning**, **big data 
 **🔹 Data Analyst – Guttman Community College, New York**  
 *Oct 2024 – Dec 2024*  
 - Analyzed student data, boosting retention rates by **9%**
-- Built ML models for early-risk detection with **22% accuracy**
+- Built ML models for early-risk detection. **Unverified metric:** the original profile reported "22% accuracy" without a baseline, dataset, or evaluation details. Do not present this figure as a validated result.
 - Applied clustering for personalized learning paths, improving performance by **28%**
 - Created dashboards in **Power BI, Tableau**, and Python, reducing report time by **45%**
 - Conducted NLP on feedback, raising student satisfaction by **16%**
@@ -94,49 +90,50 @@ Capstone: **Deep Learning for Lung and Colon Cancer Classification**
 
 ---
 
-### 🛰️ Building Segmentation Using Segment Anything Model (SAM)
+#### 🛰️ Building Segmentation Using Segment Anything Model (SAM)
 
 Applied Meta AI’s **Segment Anything Model (SAM)** to perform **zero-shot segmentation** of buildings in high-resolution satellite imagery. Leveraged **Leafmap** for geospatial analysis and interactive visualization.
 
-#### 🔍 Key Features:
+##### 🔍 Key Features:
 - **Zero-shot segmentation**: Identified buildings without task-specific training.
 - **Customizable ROIs**: Allowed users to select regions of interest interactively or via predefined bounding boxes.
 - **Interactive map visualizations**: Overlaid segmentation results on maps for intuitive exploration.
 - **Exportable outputs**: Enabled saving of masks for use in GIS applications or downstream workflows.
 
-#### 🌐 Use Cases:
+##### 🌐 Use Cases:
 - Urban development and planning
 - Disaster recovery analysis
 - Environmental change monitoring
 
-#### 🛠 Technologies Used:
+##### 🛠 Technologies Used:
 - Segment Anything Model (SAM)
 - Leafmap (Geospatial Python Library)
 - Python (Image Processing, Automation)
 - Satellite Imagery Analysis
 
-#### 🧠 Skills Demonstrated:
+##### 🧠 Skills Demonstrated:
 `Segment Anything Model (SAM)` · `Leafmap` · `Python` · `Image Segmentation` · `Computer Vision` · `Geospatial Analysis` · `Satellite Image Processing`
 
 ---
 
-### 🤖 Custom RAG Chatbot Using Gemini API & LangChain
+#### 🤖 Custom RAG Chatbot Using Gemini API & LangChain
 
 Built a personalized AI chatbot using **Google’s Gemini API** and **LangChain**, designed to answer questions based on context from `.txt` documents through **Retrieval-Augmented Generation (RAG)**.
 
-#### 🔧 Key Features:
+##### 🔧 Key Features:
 - **Gemini Embeddings**: Transformed documents into high-dimensional vectors using Gemini for semantic understanding.
 - **FAISS Vector Store**: Stored embeddings for fast similarity-based retrieval of relevant content.
 - **RAG Pipeline**: Implemented a custom pipeline where Gemini retrieves relevant document chunks and generates accurate, context-aware responses.
-- **Chat Memory**: Integrated `ConversationBufferMemory` from LangChain to maintain coherent, multi-turn dialogues.
+- **Chat Memory**: Keeps bounded conversation history within each Streamlit session for follow-up questions.
 - **Secure & Flexible Deployment**: 
   - Runs via terminal or Streamlit UI.
   - Uses `.env` or Streamlit `secrets.toml` for API key management.
 
-#### 🌟 Technologies Used:
+##### 🌟 Technologies Used:
 - LangChain · Gemini API · FAISS · Streamlit · Python · dotenv · Vector Databases · RAG Architecture
 
-#### 💡 Skills Demonstrated:
+##### 💡 Skills Demonstrated:
 `Retrieval-Augmented Generation (RAG)` · `LangChain` · `Google Gemini API` · `FAISS` · `Python` · `Streamlit` · `Vector Embeddings` · `Conversational Memory` · `Secure Environment Configuration`
 
 ---
+

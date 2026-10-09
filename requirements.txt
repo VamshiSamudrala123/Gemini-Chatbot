@@ -1,8 +1,2 @@
-langchain
-google-generativeai
-langchain-google-genai
-faiss-cpu
-tiktoken
-chromadb
-python-dotenv
-langchain-community
+# Exact direct dependency pins; CI produces a complete transitive lock.
+-r requirements.in

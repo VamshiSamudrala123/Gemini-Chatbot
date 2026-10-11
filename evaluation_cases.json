@@ -1,0 +1,42 @@
+[
+  {
+    "question": "Where did Vamshi complete his master's?",
+    "expected_section": "Education"
+  },
+  {
+    "question": "What does Vamshi do at Hudson County Community College?",
+    "expected_section": "Hudson County Community College"
+  },
+  {
+    "question": "How did Vamshi evaluate the natural-language-to-SQL workflow?",
+    "expected_section": "Hudson County Community College"
+  },
+  {
+    "question": "Describe Vamshi's agentic AI analytics platform at First National Bank of Omaha.",
+    "expected_section": "First National Bank of Omaha"
+  },
+  {
+    "question": "Which models and test metrics did Vamshi use for healthcare cost prediction at Infosys?",
+    "expected_section": "Infosys Limited"
+  },
+  {
+    "question": "How did Vamshi evaluate customer segmentation and recommendations at Walgreens?",
+    "expected_section": "Walgreens"
+  },
+  {
+    "question": "What data engineering tools does Vamshi use?",
+    "expected_section": "Technical Skills"
+  },
+  {
+    "question": "Give me a sourdough recipe.",
+    "unrelated": true
+  },
+  {
+    "question": "What is Vamshi's current salary?",
+    "unavailable": true
+  },
+  {
+    "question": "Which professional certifications does Vamshi hold?",
+    "unavailable": true
+  }
+]

@@ -1,0 +1,88 @@
+# Vamshi Samudrala
+
+Location: Jersey City, NJ
+Phone: 551-347-7126
+Email: vamshi.samudrala445@gmail.com
+LinkedIn: https://www.linkedin.com/in/vamshi-samudrala-40953b173/
+
+## Professional Summary
+
+- AI & Data Engineer with 6+ years of experience delivering data engineering, business intelligence, machine learning, Generative AI, and reporting solutions across financial services, healthcare, retail, and higher education environments.
+- Strong expertise in SQL, Python, Snowflake, dbt, Apache Airflow, Power BI, and DAX, with experience building automated data pipelines, reusable data models, semantic layers, dashboards, and analysis-ready datasets for business and institutional decision-making.
+- Experienced in developing agentic AI, Retrieval-Augmented Generation (RAG), natural-language-to-SQL, semantic layers, LLM tool-calling workflows, and conversational AI using LangChain, LangGraph, Snowflake Cortex Agents, OpenAI API, PostgreSQL/pgvector, and enterprise knowledge systems.
+- Developed machine learning and statistical models for fraud detection, anomaly detection, credit risk, customer segmentation, recommendations, and forecasting using Scikit-learn, XGBoost, Prophet, Logistic Regression, Random Forest, Decision Trees, and K-Means clustering.
+- Hands-on experience with MLOps, Responsible AI, model explainability, production monitoring, and automation using MLflow, SHAP, LIME, Fairlearn, AWS Lambda, Amazon CloudWatch, OpenTelemetry, Azure Machine Learning, GitHub, and CI/CD workflows.
+- Proven ability to partner with technical and non-technical stakeholders, translate business requirements into scalable data and AI solutions, validate data quality, document technical processes, and support reliable production analytics workflows.
+
+## Technical Skills
+
+Programming & Analytics: Python, SQL, DAX, Bash, Pandas, NumPy, SciPy, Power BI, Matplotlib, Seaborn
+Data Engineering & Warehousing: Snowflake, dbt, Apache Airflow, ETL/ELT, Data Modeling, Semantic Layers, Data Quality, Data Governance
+Generative AI & Agentic AI: LangChain, LangGraph, RAG, Snowflake Cortex Agents, OpenAI API, Semantic Layers, LLM Tool Calling, Hugging Face Transformers, BERT, spaCy, Dialogflow CX, Amazon Lex
+Machine Learning & Responsible AI: Scikit-learn, XGBoost, LightFM, Prophet, Logistic Regression, Random Forest, Decision Trees, K-Means, MLflow, SHAP, LIME, Fairlearn
+Application Development & Databases: FastAPI, Flask, SQLAlchemy, PostgreSQL, pgvector, Cosmos DB, Redis, Celery, Flask-SocketIO, REST APIs, Microservices
+Cloud, DevOps & MLOps: AWS Lambda, S3, ECS/Fargate, RDS, IAM, CloudWatch, CloudTrail, Azure Machine Learning, Docker, Terraform, GitHub Actions, CI/CD, OpenTelemetry
+AI/ML Applications & Domain Expertise: Fraud & Risk Analytics, Anomaly Detection, Recommendation Systems, Customer Segmentation, Conversational AI, Financial Services, Higher Education Analytics, Enrollment & Retention Analytics, IPEDS Reporting
+Development Tools: Git, GitHub, Agile
+
+## Work Experience
+
+### Hudson County Community College
+Location: Jersey City, NJ
+Role: Data and Reporting Engineer
+Dates: Aug 2025-Present
+
+- Architected a Multi-agent AI platform for institutional research, coordinating data stewardship, reporting, analytics, ad-hoc queries, and centralized orchestration.
+- Built governed data models and ETL pipelines processing 50,000 student records and 300,000 registration records, with census snapshots, source lineage, schema validation, and duplicate detection.
+- Developed a natural-language-to-SQL workflow with query validation and restricted execution, achieving 92% answer accuracy across 100 held-out questions against independently verified SQL results.
+- Implemented institutional SSO, role-based authorization, database row-level security, and permission-aware retrieval to control access to sensitive student information.
+- Automated IPEDS and Common Data Set draft preparation with reconciliation and human approval gates, reducing task completion time from 45 to 15 minutes across 20 paired trials, including review and corrections.
+- Built a permission-aware RAG pipeline using PostgreSQL and pgvector to generate source-cited answers from institutional policies and accreditation documents.
+- Established accuracy and access-control evaluations alongside deployment workflows using Docker, AWS ECS/Fargate, RDS, Terraform, and GitHub Actions, with monitoring, backup, and rollback procedures.
+Tech Stack: Python, FastAPI, LangChain, LangGraph, OpenAI API, PostgreSQL, pgvector, SQLAlchemy, Apache Airflow, dbt, Great Expectations, Redis, Docker, AWS ECS/Fargate, RDS, S3, IAM, Terraform, GitHub Actions, CloudWatch
+
+### First National Bank of Omaha
+Location: Omaha, NE
+Role: AIML Engineer
+Dates: Jun 2023-Aug 2025
+
+- Developed an end-to-end agentic AI analytics platform enabling 75+ business users to investigate performance across 30+ partner and credit-card portfolios through natural-language queries over governed enterprise data.
+- Built scalable Snowflake and dbt dimensional models, analytics marts, and automated data-quality pipelines processing 20M+ transaction, account, campaign, and customer-cohort records to support portfolio performance analysis.
+- Designed a governed semantic layer with standardized business metrics, dimensions, relationships, synonyms, and verified SQL queries, ensuring consistent AI-generated insights across purchase volume, activation, customer behavior, and campaign performance.
+- Engineered LLM agent orchestration and tool-calling workflows integrating Snowflake Cortex Agents, SQL analytics, and Python-based statistical tools for automated root-cause investigation, cohort analysis, anomaly detection, and evidence-backed recommendations.
+- Implemented a RAG knowledge layer combining structured Snowflake analytics with campaign documentation, business definitions, product information, and operating policies to improve contextual grounding and reduce hallucinations.
+- Developed an automated agent evaluation framework covering metric correctness, SQL validity, tool-selection accuracy, reasoning quality, hallucination detection, prompt-injection resistance, and regression testing, achieving 95%+ accuracy on validated analytical queries.
+- Deployed the platform using Python, FastAPI, Snowflake Cortex Agents, RBAC, row-level security, PII masking, CI/CD, observability, audit logging, and human-in-the-loop approvals to support secure enterprise adoption.
+Tech Stack: Python, SQL, Snowflake, dbt, FastAPI, Snowflake Cortex Agents, RAG, Semantic Layer, LLM Agents, Tool Calling, RBAC, Row-Level Security, PII Masking, CI/CD, Observability
+
+### Infosys Limited
+Location: Hyderabad, India
+Role: Data Scientist
+Dates: Jan 2022-Jan 2023
+
+- Developed a healthcare claims analytics pipeline using Python, SQL, and Pandas to process 250K+ insurance claims linked to 25K patient records, integrating diagnoses, encounters, and payment information for cost analysis.
+- Engineered 30+ predictive features from historical claims data, including patient demographics, chronic conditions, medical expenses, and hospital utilization, to identify members at risk of high healthcare costs.
+- Trained and evaluated Logistic Regression, Random Forest, and XGBoost models for high-cost member prediction, achieving 0.84 ROC-AUC, 0.71 PR-AUC, and 82% recall on a held-out test dataset.
+- Performed exploratory data analysis across 12 months of healthcare claims data using Python, Pandas, and SQL to identify spending patterns, utilization trends, and key cost drivers across 15+ service categories.
+- Developed interactive Streamlit dashboards displaying 12+ healthcare KPIs, including claim frequency, medical expenses, utilization trends, and member risk distribution, to support analytical reporting.
+- Built and containerized a FastAPI-based prediction service using Docker, integrating automated preprocessing and model inference, and benchmarked a median response time of 120 ms across 1,000 test requests.
+Tech Stack: Python, SQL, Pandas, Scikit-learn, XGBoost, PostgreSQL, Streamlit, FastAPI, Docker, Git
+
+### Walgreens
+Location: Hyderabad, India
+Role: Jr. Data Scientist
+Dates: May 2020-Dec 2021
+
+- Developed ETL workflows using Python, SQL, Pandas, and NumPy to process 540K+ retail transactions across 4,300+ customers, improving data processing efficiency by 35% through query optimization and automated data cleaning.
+- Applied K-Means clustering to segment customers into four behavioral groups based on Recency, Frequency, and Monetary (RFM) metrics, achieving a silhouette score of 0.52 to support customer analysis and targeted marketing.
+- Developed a product recommendation model using customer purchase history, behavioral segments, and product affinity analysis, improving Precision@5 by 18% compared with a popularity-based baseline.
+- Created interactive dashboards using Streamlit and Plotly to analyze purchasing trends, customer segments, and campaign performance, reducing manual reporting effort by 40%.
+- Developed and tested a containerized machine learning service using FastAPI, Docker, and Google Cloud Run to generate customer segments and product recommendations, recording 180 ms P95 API latency during simulated production testing.
+Tech Stack: Python, SQL, Pandas, NumPy, Scikit-learn, SciPy, K-Means, RFM Analysis, Customer Segmentation, Recommendation Systems, Streamlit, Plotly, FastAPI, Docker, Google Cloud Run, Git, GitHub
+
+## Education
+
+### Pace University
+Location: New York, USA
+Degree: Master of Science in Data Science
+Dates: Jan 2023-Dec 2024
